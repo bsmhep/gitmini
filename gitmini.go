@@ -40,7 +40,7 @@ func checkout(args []string) {
 	r, err := git.PlainOpen(path)
 	CheckIfError(err)
 
-    ref_full_name := fmt.Sprintf("refs/heads/%s", ref_name)
+	ref_full_name := fmt.Sprintf("refs/heads/%s", ref_name)
 	_, err = r.Reference(plumbing.ReferenceName(ref_full_name), true)
 	if err != nil {
 		ref_full_name = fmt.Sprintf("refs/tags/%s", ref_name)
