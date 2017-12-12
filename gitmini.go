@@ -114,7 +114,13 @@ func ls(args []string) {
 }
 
 func main() {
-	subCommand := os.Args[1]
+    var subCommand string
+    if len(os.Args) == 1 {
+        subCommand = "version"
+    } else {
+        subCommand = os.Args[1]
+    }
+
 	switch subCommand {
 	case "version":
 		version()
