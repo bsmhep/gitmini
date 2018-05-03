@@ -20,7 +20,7 @@ func CheckIfError(err error) {
 }
 
 func version() {
-	fmt.Println("gittemp version 0.1.0")
+	fmt.Println("gitmini version 0.1.0")
 }
 
 func clone(args []string) {
