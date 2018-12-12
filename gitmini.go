@@ -20,7 +20,7 @@ func CheckIfError(err error) {
 }
 
 func version() {
-	fmt.Println("gitmini version 0.1.0")
+	fmt.Println("gitmini version 0.2.0")
 }
 
 func clone(args []string) {
@@ -34,8 +34,10 @@ func clone(args []string) {
 }
 
 func checkout(args []string) {
-	path := args[0]
-	ref_name := args[1]
+	path, err := os.Getwd()
+	CheckIfError(err)
+
+	ref_name := args[0]
 
 	r, err := git.PlainOpen(path)
 	CheckIfError(err)
@@ -58,8 +60,8 @@ func checkout(args []string) {
 }
 
 func ls_remote(args []string) {
-	ref_type := args[0]
-	url := args[1]
+	ref_type := args[1]
+	url := args[2]
 
 	r, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{
 		URL: url,
@@ -69,9 +71,9 @@ func ls_remote(args []string) {
 	var refIter storer.ReferenceIter
 
 	switch ref_type {
-	case "branches":
+	case "--heads":
 		refIter, err = r.Branches()
-	case "tags":
+	case "--tags":
 		refIter, err = r.Tags()
 	default:
 		fmt.Printf("Unknown ref type: %s\n", ref_type)
@@ -87,8 +89,10 @@ func ls_remote(args []string) {
 }
 
 func ls(args []string) {
-	ref_type := args[0]
-	path := args[1]
+	path, err := os.Getwd()
+	CheckIfError(err)
+
+	ref_type := args[1]
 
 	r, err := git.PlainOpen(path)
 	CheckIfError(err)
@@ -96,9 +100,9 @@ func ls(args []string) {
 	var refIter storer.ReferenceIter
 
 	switch ref_type {
-	case "branches":
+	case "refs/heads":
 		refIter, err = r.Branches()
-	case "tags":
+	case "refs/tags":
 		refIter, err = r.Tags()
 	default:
 		fmt.Printf("Unknown ref type: %s\n", ref_type)
@@ -130,7 +134,7 @@ func main() {
 		checkout(os.Args[2:])
 	case "ls-remote":
 		ls_remote(os.Args[2:])
-	case "ls":
+	case "for-each-ref":
 		ls(os.Args[2:])
 	default:
 		fmt.Printf("Unknown command: %s\n", subCommand)
